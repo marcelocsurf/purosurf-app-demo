@@ -208,13 +208,45 @@ body{background:var(--dark);color:var(--cream);font-family:'DM Sans',sans-serif;
 .cal-day.open .cal-acts{display:block;}
 .act-item{display:flex;align-items:center;gap:10px;padding:9px;background:rgba(0,0,0,0.18);border-radius:8px;margin-bottom:5px;cursor:pointer;transition:all 0.2s;}
 .act-item:hover{background:rgba(233,65,124,0.06);}
+.act-item.included{border-left:2px solid var(--teal);}
+.act-item.added{border-left:2px solid var(--gold);background:rgba(200,169,110,0.06);}
 .act-time{font-size:9px;color:var(--pink);font-weight:500;min-width:34px;text-align:center;line-height:1.2;}
 .act-name{font-size:12px;color:var(--cream);font-weight:400;}
 .act-detail{font-size:9px;color:var(--muted);margin-top:1px;}
+.act-price{font-size:9px;color:var(--gold);margin-top:1px;}
 .act-status{font-size:8px;letter-spacing:0.06em;padding:2px 7px;border-radius:20px;text-transform:uppercase;white-space:nowrap;}
 .act-status.open{color:var(--teal);background:rgba(47,191,173,0.1);}
 .act-status.full{color:var(--muted);background:rgba(255,255,255,0.06);}
 .act-status.rsv{color:var(--pink);background:rgba(233,65,124,0.1);}
+.act-status.inc{color:var(--teal);background:rgba(47,191,173,0.1);}
+.act-status.add-btn{color:var(--gold);background:rgba(200,169,110,0.12);border:1px solid rgba(200,169,110,0.25);}
+.act-status.added-tag{color:var(--gold);background:rgba(200,169,110,0.1);}
+
+/* Mode switcher */
+.mode-switcher{display:flex;background:var(--card);border-radius:10px;padding:3px;margin-bottom:16px;border:1px solid rgba(255,255,255,0.04);}
+.mode-btn{flex:1;padding:9px 8px;text-align:center;border-radius:8px;font-size:11px;font-weight:400;cursor:pointer;transition:all 0.3s;color:var(--muted);}
+.mode-btn.active{background:rgba(233,65,124,0.12);color:var(--cream);border:1px solid rgba(233,65,124,0.2);}
+.mode-btn .mode-icon{font-size:16px;margin-bottom:3px;}
+.mode-btn .mode-label{font-size:9px;letter-spacing:0.06em;text-transform:uppercase;}
+
+/* Folio bar */
+.folio-bar{background:linear-gradient(135deg,var(--card2),var(--card));border-radius:11px;padding:14px 16px;margin-bottom:14px;border:1px solid rgba(200,169,110,0.15);display:flex;align-items:center;justify-content:space-between;}
+.folio-label{font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);margin-bottom:2px;}
+.folio-total{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--cream);font-weight:300;}
+.folio-sub{font-size:9px;color:var(--muted);}
+.folio-right{text-align:right;}
+.folio-count{font-size:20px;color:var(--cream);font-family:'Cormorant Garamond',serif;}
+.folio-count-label{font-size:9px;color:var(--muted);letter-spacing:0.06em;text-transform:uppercase;}
+
+/* Category filters */
+.cat-filters{display:flex;gap:6px;margin-bottom:14px;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch;}
+.cat-filters::-webkit-scrollbar{display:none;}
+.cat-chip{padding:5px 12px;border-radius:20px;font-size:9px;letter-spacing:0.05em;white-space:nowrap;cursor:pointer;transition:all 0.2s;background:rgba(255,255,255,0.04);color:var(--muted);border:1px solid rgba(255,255,255,0.06);}
+.cat-chip.active{background:rgba(233,65,124,0.12);color:var(--pink);border-color:rgba(233,65,124,0.25);}
+
+/* Camp badge */
+.camp-badge{display:inline-block;font-size:8px;letter-spacing:0.08em;text-transform:uppercase;padding:2px 7px;border-radius:20px;background:rgba(47,191,173,0.1);color:var(--teal);border:1px solid rgba(47,191,173,0.15);margin-left:6px;}
+.day-label-tag{font-size:8px;color:var(--muted);background:rgba(255,255,255,0.04);padding:2px 7px;border-radius:20px;margin-left:auto;}
 
 /* ══ GIVE BACK ══ */
 .giveback-hero{background:linear-gradient(150deg,#061520 0%,#0a2030 60%,var(--dark) 100%);border-radius:16px;padding:0 0 22px;margin-bottom:18px;position:relative;overflow:hidden;border:1px solid rgba(47,191,173,0.15);}
@@ -1055,36 +1087,264 @@ body{background:var(--dark);color:var(--cream);font-family:'DM Sans',sans-serif;
 <!-- ═══════════ CALENDAR ═══════════ -->
 <div class="screen" id="screen-calendar">
   <div style="font-family:'Cormorant Garamond',serif;font-size:24px;color:var(--cream);margin-bottom:5px;font-weight:300;">Your week at<br><em style="color:var(--pink)">Puro Surf.</em></div>
-  <div style="font-size:11px;color:var(--muted);line-height:1.65;margin-bottom:18px;">Tap any activity to reserve your spot. Live availability.</div>
-  <div class="cal-day open">
-    <div class="cal-day-hdr" onclick="toggleDay(this)"><div><div class="cal-day-name">Monday</div><div class="cal-day-date">February 24</div></div><div class="cal-day-count">5 activities</div></div>
-    <div class="cal-acts">
-      <div class="act-item" onclick="showToast('Spot reserved! ✓')"><div class="act-time">6:30<br>AM</div><div><div class="act-name">Surf — Level 2</div><div class="act-detail">With Marcelo · El Zonte · 3 spots</div></div><div class="act-status open">Open</div></div>
-      <div class="act-item"><div class="act-time">8:00<br>AM</div><div><div class="act-name">Conscious breakfast</div><div class="act-detail">Shared table</div></div><div class="act-status rsv">Reserved</div></div>
-      <div class="act-item" onclick="showToast('Spot reserved! ✓')"><div class="act-time">10:00<br>AM</div><div><div class="act-name">Yoga &amp; mobility</div><div class="act-detail">With Sara · Terrace · 1 spot</div></div><div class="act-status open">1 spot</div></div>
-      <div class="act-item" onclick="showToast('Spot reserved! ✓')"><div class="act-time">3:00<br>PM</div><div><div class="act-name">Surf Skate session</div><div class="act-detail">With Marcelo · 4 spots</div></div><div class="act-status open">Open</div></div>
-      <div class="act-item" onclick="showToast('Spot reserved! ✓')"><div class="act-time">5:30<br>PM</div><div><div class="act-name">Sunset sound bath</div><div class="act-detail">Main terrace · 2 of 8</div></div><div class="act-status open">Open</div></div>
+  <div style="font-size:11px;color:var(--muted);line-height:1.65;margin-bottom:14px;">Design your experience. Every activity adds to your room folio.</div>
+
+  <!-- Mode Switcher -->
+  <div class="mode-switcher">
+    <div class="mode-btn active" onclick="switchCalMode('camp')">
+      <div class="mode-icon">🏄</div>
+      <div class="mode-label">Surf Camp</div>
+    </div>
+    <div class="mode-btn" onclick="switchCalMode('hotel')">
+      <div class="mode-icon">🏨</div>
+      <div class="mode-label">Hotel Guest</div>
     </div>
   </div>
-  <div class="cal-day">
-    <div class="cal-day-hdr" onclick="toggleDay(this)"><div><div class="cal-day-name">Tuesday</div><div class="cal-day-date">February 25</div></div><div class="cal-day-count">5 activities</div></div>
-    <div class="cal-acts">
-      <div class="act-item" onclick="showToast('Spot reserved! ✓')"><div class="act-time">6:00<br>AM</div><div><div class="act-name">Surf — Beginners</div><div class="act-detail">With Carlos · 5 spots</div></div><div class="act-status open">Open</div></div>
-      <div class="act-item" onclick="showToast('Spot reserved! ✓')"><div class="act-time">9:00<br>AM</div><div><div class="act-name">BJJ intro session</div><div class="act-detail">No experience needed · 6 spots</div></div><div class="act-status open">Open</div></div>
-      <div class="act-item" onclick="showToast('Spot reserved! ✓')"><div class="act-time">11:00<br>AM</div><div><div class="act-name">Unatural Method</div><div class="act-detail">Breath · Cold · Movement · 4 spots</div></div><div class="act-status open">Open</div></div>
-      <div class="act-item" onclick="showToast('Spot reserved! ✓')"><div class="act-time">4:00<br>PM</div><div><div class="act-name">Ice Bath + Sauna</div><div class="act-detail">Guided contrast therapy · 3 spots</div></div><div class="act-status open">Open</div></div>
-      <div class="act-item" onclick="showToast('Spot reserved! ✓')"><div class="act-time">6:00<br>PM</div><div><div class="act-name">Community dinner</div><div class="act-detail">Shared table · No limit</div></div><div class="act-status open">Open</div></div>
+
+  <!-- Folio Summary -->
+  <div class="folio-bar" id="folio-bar">
+    <div>
+      <div class="folio-label">Added to room</div>
+      <div class="folio-total" id="folio-total">$0</div>
+      <div class="folio-sub">Extras beyond package</div>
+    </div>
+    <div class="folio-right">
+      <div class="folio-count" id="folio-count">0</div>
+      <div class="folio-count-label">added</div>
     </div>
   </div>
-  <div class="cal-day">
-    <div class="cal-day-hdr" onclick="toggleDay(this)"><div><div class="cal-day-name">Wednesday</div><div class="cal-day-date">February 26</div></div><div class="cal-day-count">4 activities</div></div>
-    <div class="cal-acts">
-      <div class="act-item"><div class="act-time">6:30<br>AM</div><div><div class="act-name">Surf — Advanced</div><div class="act-detail">With Marcelo · El Tunco</div></div><div class="act-status full">Full</div></div>
-      <div class="act-item" onclick="showToast('Spot reserved! ✓')"><div class="act-time">9:00<br>AM</div><div><div class="act-name">Yoga — Surf flow</div><div class="act-detail">Garden · 6 spots</div></div><div class="act-status open">Open</div></div>
-      <div class="act-item" onclick="showToast('Spot reserved! ✓')"><div class="act-time">11:00<br>AM</div><div><div class="act-name">Ice Bath session</div><div class="act-detail">Pool · Guided · 4 spots</div></div><div class="act-status open">Open</div></div>
-      <div class="act-item" onclick="showToast('Spot reserved! ✓')"><div class="act-time">12:00<br>PM</div><div><div class="act-name">Talk: The Happiness Triangle</div><div class="act-detail">With Marcelo · 3 spots</div></div><div class="act-status open">Open</div></div>
-    </div>
+
+  <!-- Category Filters -->
+  <div class="cat-filters">
+    <div class="cat-chip active" onclick="filterCat('all',this)">All</div>
+    <div class="cat-chip" onclick="filterCat('surf',this)">🏄 Surf</div>
+    <div class="cat-chip" onclick="filterCat('wellness',this)">🧘 Wellness</div>
+    <div class="cat-chip" onclick="filterCat('training',this)">💪 Training</div>
+    <div class="cat-chip" onclick="filterCat('culture',this)">🎨 Culture</div>
+    <div class="cat-chip" onclick="filterCat('evening',this)">🌙 Evening</div>
   </div>
+
+  <!-- ══ CAMP MODE ══ -->
+  <div id="cal-camp">
+
+    <!-- ARRIVAL — Sunday -->
+    <div class="cal-day open">
+      <div class="cal-day-hdr" onclick="toggleDay(this)"><div><div class="cal-day-name">Sunday <span class="camp-badge">Arrival</span></div><div class="cal-day-date">March 29</div></div><div class="cal-day-count">3 activities</div></div>
+      <div class="cal-acts">
+        <div class="act-item included" data-cat="all"><div class="act-time">2:00<br>PM</div><div><div class="act-name">Airport pickup</div><div class="act-detail">Private driver · Welcome ride</div></div><div class="act-status inc">Included</div></div>
+        <div class="act-item included" data-cat="all"><div class="act-time">3:30<br>PM</div><div><div class="act-name">Check-in &amp; welcome kit</div><div class="act-detail">Front desk · Room tour · Camp schedule</div></div><div class="act-status inc">Included</div></div>
+        <div class="act-item included" data-cat="all"><div class="act-time">5:30<br>PM</div><div><div class="act-name">Meet &amp; greet with academy staff</div><div class="act-detail">Relax and enjoy the sunset</div></div><div class="act-status inc">Included</div></div>
+      </div>
+    </div>
+
+    <!-- DAY 1 — Monday -->
+    <div class="cal-day open">
+      <div class="cal-day-hdr" onclick="toggleDay(this)"><div><div class="cal-day-name">Monday <span class="camp-badge">Day 1</span></div><div class="cal-day-date">March 30</div></div><div class="cal-day-count">7 activities</div></div>
+      <div class="cal-acts">
+        <div class="act-item included" data-cat="surf"><div class="act-time">6:00<br>AM</div><div><div class="act-name">Theory &amp; warm up</div><div class="act-detail">30 min · Surf fundamentals</div></div><div class="act-status inc">Included</div></div>
+        <div class="act-item included" data-cat="surf"><div class="act-time">6:30<br>AM</div><div><div class="act-name">Filmed surf session</div><div class="act-detail">With coach · El Zonte</div></div><div class="act-status inc">Included</div></div>
+        <div class="act-item included" data-cat="surf"><div class="act-time">9:00<br>AM</div><div><div class="act-name">Video analysis</div><div class="act-detail">45 min · Review your session</div></div><div class="act-status inc">Included</div></div>
+        <div class="act-item included" data-cat="surf"><div class="act-time">10:00<br>AM</div><div><div class="act-name">Surf drills</div><div class="act-detail">45 min · Technical correction</div></div><div class="act-status inc">Included</div></div>
+        <div class="act-item included" data-cat="wellness"><div class="act-time">4:00<br>PM</div><div><div class="act-name">Restorative yoga</div><div class="act-detail">With Sara · Terrace</div></div><div class="act-status inc">Included</div></div>
+        <div class="act-item" data-cat="wellness" onclick="addExtra(this,45,'Massage — 60 min')"><div class="act-time">5:30<br>PM</div><div><div class="act-name">Massage — 60 min</div><div class="act-detail">Deep tissue recovery</div><div class="act-price">$45</div></div><div class="act-status add-btn">+ Add</div></div>
+        <div class="act-item" data-cat="culture" onclick="addExtra(this,25,'Coffee tasting')"><div class="act-time">3:00<br>PM</div><div><div class="act-name">Coffee tasting</div><div class="act-detail">Local single-origin · Barista guided</div><div class="act-price">$25</div></div><div class="act-status add-btn">+ Add</div></div>
+      </div>
+    </div>
+
+    <!-- DAY 2 — Tuesday -->
+    <div class="cal-day">
+      <div class="cal-day-hdr" onclick="toggleDay(this)"><div><div class="cal-day-name">Tuesday <span class="camp-badge">Day 2</span></div><div class="cal-day-date">March 31</div></div><div class="cal-day-count">7 activities</div></div>
+      <div class="cal-acts">
+        <div class="act-item included" data-cat="surf"><div class="act-time">6:00<br>AM</div><div><div class="act-name">Theory &amp; warm up</div><div class="act-detail">30 min · Building on Day 1</div></div><div class="act-status inc">Included</div></div>
+        <div class="act-item included" data-cat="surf"><div class="act-time">6:30<br>AM</div><div><div class="act-name">Filmed surf session</div><div class="act-detail">With coach · El Zonte</div></div><div class="act-status inc">Included</div></div>
+        <div class="act-item included" data-cat="surf"><div class="act-time">9:00<br>AM</div><div><div class="act-name">Video analysis</div><div class="act-detail">45 min · Progress tracking</div></div><div class="act-status inc">Included</div></div>
+        <div class="act-item included" data-cat="surf"><div class="act-time">10:00<br>AM</div><div><div class="act-name">Surf drills</div><div class="act-detail">45 min · Pop-up &amp; positioning</div></div><div class="act-status inc">Included</div></div>
+        <div class="act-item included" data-cat="training"><div class="act-time">4:00<br>PM</div><div><div class="act-name">UNatural Method class</div><div class="act-detail">Breath · Cold · Movement</div></div><div class="act-status inc">Included</div></div>
+        <div class="act-item" data-cat="wellness" onclick="addExtra(this,45,'Massage — 60 min')"><div class="act-time">5:30<br>PM</div><div><div class="act-name">Massage — 60 min</div><div class="act-detail">Sports recovery</div><div class="act-price">$45</div></div><div class="act-status add-btn">+ Add</div></div>
+        <div class="act-item" data-cat="evening" onclick="addExtra(this,35,'Wine night')"><div class="act-time">7:00<br>PM</div><div><div class="act-name">Wine night</div><div class="act-detail">Curated tasting · Terrace</div><div class="act-price">$35</div></div><div class="act-status add-btn">+ Add</div></div>
+      </div>
+    </div>
+
+    <!-- DAY 3 — Wednesday -->
+    <div class="cal-day">
+      <div class="cal-day-hdr" onclick="toggleDay(this)"><div><div class="cal-day-name">Wednesday <span class="camp-badge">Day 3</span></div><div class="cal-day-date">April 1</div></div><div class="cal-day-count">7 activities</div></div>
+      <div class="cal-acts">
+        <div class="act-item included" data-cat="surf"><div class="act-time">6:00<br>AM</div><div><div class="act-name">Theory &amp; warm up</div><div class="act-detail">30 min · Reading the ocean</div></div><div class="act-status inc">Included</div></div>
+        <div class="act-item included" data-cat="surf"><div class="act-time">6:30<br>AM</div><div><div class="act-name">Filmed surf session</div><div class="act-detail">With coach · El Zonte</div></div><div class="act-status inc">Included</div></div>
+        <div class="act-item included" data-cat="surf"><div class="act-time">9:00<br>AM</div><div><div class="act-name">Video analysis</div><div class="act-detail">45 min · Mid-camp review</div></div><div class="act-status inc">Included</div></div>
+        <div class="act-item included" data-cat="surf"><div class="act-time">10:00<br>AM</div><div><div class="act-name">Surf drills</div><div class="act-detail">45 min · Wave selection</div></div><div class="act-status inc">Included</div></div>
+        <div class="act-item included" data-cat="wellness"><div class="act-time">4:00<br>PM</div><div><div class="act-name">Ice Bath experience</div><div class="act-detail">Guided contrast therapy</div></div><div class="act-status inc">Included</div></div>
+        <div class="act-item" data-cat="culture" onclick="addExtra(this,30,'T-shirt tie-dye workshop')"><div class="act-time">3:00<br>PM</div><div><div class="act-name">T-shirt tie-dye workshop</div><div class="act-detail">Create your own Puro Surf tee</div><div class="act-price">$30</div></div><div class="act-status add-btn">+ Add</div></div>
+        <div class="act-item" data-cat="wellness" onclick="addExtra(this,45,'Massage — 60 min')"><div class="act-time">5:30<br>PM</div><div><div class="act-name">Massage — 60 min</div><div class="act-detail">Mid-week recovery</div><div class="act-price">$45</div></div><div class="act-status add-btn">+ Add</div></div>
+      </div>
+    </div>
+
+    <!-- DAY 4 — Thursday -->
+    <div class="cal-day">
+      <div class="cal-day-hdr" onclick="toggleDay(this)"><div><div class="cal-day-name">Thursday <span class="camp-badge">Day 4</span></div><div class="cal-day-date">April 2</div></div><div class="cal-day-count">6 activities</div></div>
+      <div class="cal-acts">
+        <div class="act-item included" data-cat="surf"><div class="act-time">6:00<br>AM</div><div><div class="act-name">Theory &amp; warm up</div><div class="act-detail">30 min · Advanced techniques</div></div><div class="act-status inc">Included</div></div>
+        <div class="act-item included" data-cat="surf"><div class="act-time">6:30<br>AM</div><div><div class="act-name">Filmed surf session</div><div class="act-detail">With coach · El Zonte</div></div><div class="act-status inc">Included</div></div>
+        <div class="act-item included" data-cat="surf"><div class="act-time">9:00<br>AM</div><div><div class="act-name">Video analysis</div><div class="act-detail">45 min · Technique refinement</div></div><div class="act-status inc">Included</div></div>
+        <div class="act-item included" data-cat="surf"><div class="act-time">10:00<br>AM</div><div><div class="act-name">Surf drills</div><div class="act-detail">45 min · Bottom turn focus</div></div><div class="act-status inc">Included</div></div>
+        <div class="act-item included" data-cat="culture"><div class="act-time">1:00<br>PM</div><div><div class="act-name">Local tour</div><div class="act-detail">El Tunco · Culture &amp; history</div></div><div class="act-status inc">Included</div></div>
+        <div class="act-item" data-cat="culture" onclick="addExtra(this,25,'Painting afternoon')"><div class="act-time">4:00<br>PM</div><div><div class="act-name">Painting afternoon</div><div class="act-detail">Art session · Ocean-inspired</div><div class="act-price">$25</div></div><div class="act-status add-btn">+ Add</div></div>
+      </div>
+    </div>
+
+    <!-- DAY 5 — Friday -->
+    <div class="cal-day">
+      <div class="cal-day-hdr" onclick="toggleDay(this)"><div><div class="cal-day-name">Friday <span class="camp-badge">Day 5</span></div><div class="cal-day-date">April 3</div></div><div class="cal-day-count">7 activities</div></div>
+      <div class="cal-acts">
+        <div class="act-item included" data-cat="surf"><div class="act-time">6:00<br>AM</div><div><div class="act-name">Theory &amp; warm up</div><div class="act-detail">30 min · Final day prep</div></div><div class="act-status inc">Included</div></div>
+        <div class="act-item included" data-cat="surf"><div class="act-time">6:30<br>AM</div><div><div class="act-name">Filmed surf session</div><div class="act-detail">With coach · El Zonte</div></div><div class="act-status inc">Included</div></div>
+        <div class="act-item included" data-cat="surf"><div class="act-time">9:00<br>AM</div><div><div class="act-name">Video analysis</div><div class="act-detail">45 min · Final review &amp; progress</div></div><div class="act-status inc">Included</div></div>
+        <div class="act-item included" data-cat="surf"><div class="act-time">10:00<br>AM</div><div><div class="act-name">Surf drills</div><div class="act-detail">45 min · Wrap-up session</div></div><div class="act-status inc">Included</div></div>
+        <div class="act-item included" data-cat="training"><div class="act-time">6:00<br>PM</div><div><div class="act-name">Self-defence class</div><div class="act-detail">Fundamentals · No experience needed</div></div><div class="act-status inc">Included</div></div>
+        <div class="act-item" data-cat="wellness" onclick="addExtra(this,45,'Massage — 60 min')"><div class="act-time">5:00<br>PM</div><div><div class="act-name">Massage — 60 min</div><div class="act-detail">End-of-camp recovery</div><div class="act-price">$45</div></div><div class="act-status add-btn">+ Add</div></div>
+        <div class="act-item" data-cat="evening" onclick="addExtra(this,0,'Night out — farewell')"><div class="act-time">8:00<br>PM</div><div><div class="act-name">Night out — farewell!</div><div class="act-detail">Suggestion · El Tunco nightlife</div></div><div class="act-status open">Optional</div></div>
+      </div>
+    </div>
+
+    <!-- DAY 6 — Saturday -->
+    <div class="cal-day">
+      <div class="cal-day-hdr" onclick="toggleDay(this)"><div><div class="cal-day-name">Saturday <span class="camp-badge">Day 6</span></div><div class="cal-day-date">April 4</div></div><div class="cal-day-count">6 activities</div></div>
+      <div class="cal-acts">
+        <div class="act-item included" data-cat="surf"><div class="act-time">6:00<br>AM</div><div><div class="act-name">Theory &amp; warm up</div><div class="act-detail">30 min · Bonus session</div></div><div class="act-status inc">Included</div></div>
+        <div class="act-item included" data-cat="surf"><div class="act-time">6:30<br>AM</div><div><div class="act-name">Filmed surf session</div><div class="act-detail">With coach · Final ride</div></div><div class="act-status inc">Included</div></div>
+        <div class="act-item included" data-cat="surf"><div class="act-time">9:00<br>AM</div><div><div class="act-name">Video analysis</div><div class="act-detail">45 min · Your surf evolution</div></div><div class="act-status inc">Included</div></div>
+        <div class="act-item included" data-cat="surf"><div class="act-time">10:00<br>AM</div><div><div class="act-name">Surf drills</div><div class="act-detail">45 min · Graduation drills</div></div><div class="act-status inc">Included</div></div>
+        <div class="act-item" data-cat="culture" onclick="addExtra(this,25,'Coffee tasting')"><div class="act-time">3:00<br>PM</div><div><div class="act-name">Coffee tasting</div><div class="act-detail">Farewell coffee experience</div><div class="act-price">$25</div></div><div class="act-status add-btn">+ Add</div></div>
+        <div class="act-item" data-cat="evening" onclick="addExtra(this,35,'Wine night')"><div class="act-time">7:00<br>PM</div><div><div class="act-name">Farewell wine night</div><div class="act-detail">Celebration dinner · Terrace</div><div class="act-price">$35</div></div><div class="act-status add-btn">+ Add</div></div>
+      </div>
+    </div>
+
+    <!-- DEPARTURE — Sunday -->
+    <div class="cal-day">
+      <div class="cal-day-hdr" onclick="toggleDay(this)"><div><div class="cal-day-name">Sunday <span class="camp-badge">Departure</span></div><div class="cal-day-date">April 5</div></div><div class="cal-day-count">2 activities</div></div>
+      <div class="cal-acts">
+        <div class="act-item included" data-cat="all"><div class="act-time">10:00<br>AM</div><div><div class="act-name">Check-out</div><div class="act-detail">Front desk · Folio review</div></div><div class="act-status inc">Included</div></div>
+        <div class="act-item included" data-cat="all"><div class="act-time">11:00<br>AM</div><div><div class="act-name">Airport drop-off</div><div class="act-detail">Private driver</div></div><div class="act-status inc">Included</div></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ══ HOTEL MODE ══ -->
+  <div id="cal-hotel" style="display:none;">
+
+    <!-- Monday -->
+    <div class="cal-day open">
+      <div class="cal-day-hdr" onclick="toggleDay(this)"><div><div class="cal-day-name">Monday</div><div class="cal-day-date">March 30</div></div><div class="cal-day-count">10 activities</div></div>
+      <div class="cal-acts">
+        <div class="act-item" data-cat="surf" onclick="addExtra(this,65,'Surf — Beginners')"><div class="act-time">6:00<br>AM</div><div><div class="act-name">Surf — Beginners</div><div class="act-detail">With Carlos · El Zonte · 5 spots</div><div class="act-price">$65</div></div><div class="act-status add-btn">+ Add</div></div>
+        <div class="act-item" data-cat="surf" onclick="addExtra(this,65,'Surf — Intermediate')"><div class="act-time">6:00<br>AM</div><div><div class="act-name">Surf — Intermediate</div><div class="act-detail">With Marcelo · El Zonte · 4 spots</div><div class="act-price">$65</div></div><div class="act-status add-btn">+ Add</div></div>
+        <div class="act-item" data-cat="wellness" onclick="addExtra(this,20,'Yoga &amp; mobility')"><div class="act-time">8:00<br>AM</div><div><div class="act-name">Yoga &amp; mobility</div><div class="act-detail">With Sara · Garden terrace · 8 spots</div><div class="act-price">$20</div></div><div class="act-status add-btn">+ Add</div></div>
+        <div class="act-item" data-cat="training" onclick="addExtra(this,30,'Surf Skate session')"><div class="act-time">10:00<br>AM</div><div><div class="act-name">Surf Skate session</div><div class="act-detail">With Marcelo · 6 spots</div><div class="act-price">$30</div></div><div class="act-status add-btn">+ Add</div></div>
+        <div class="act-item" data-cat="training" onclick="addExtra(this,25,'Pool training')"><div class="act-time">11:00<br>AM</div><div><div class="act-name">Pool training</div><div class="act-detail">Surf simulation · Technique · 4 spots</div><div class="act-price">$25</div></div><div class="act-status add-btn">+ Add</div></div>
+        <div class="act-item" data-cat="wellness" onclick="addExtra(this,20,'Meditation session')"><div class="act-time">12:00<br>PM</div><div><div class="act-name">Guided meditation</div><div class="act-detail">Breathwork · Rooftop · 10 spots</div><div class="act-price">$20</div></div><div class="act-status add-btn">+ Add</div></div>
+        <div class="act-item" data-cat="culture" onclick="addExtra(this,25,'Coffee tasting')"><div class="act-time">3:00<br>PM</div><div><div class="act-name">Coffee tasting</div><div class="act-detail">Local single-origin · Barista guided</div><div class="act-price">$25</div></div><div class="act-status add-btn">+ Add</div></div>
+        <div class="act-item" data-cat="wellness" onclick="addExtra(this,30,'Ice Bath guided')"><div class="act-time">4:00<br>PM</div><div><div class="act-name">Ice Bath guided</div><div class="act-detail">Contrast therapy · Sauna · 4 spots</div><div class="act-price">$30</div></div><div class="act-status add-btn">+ Add</div></div>
+        <div class="act-item" data-cat="wellness" onclick="addExtra(this,45,'Massage — 60 min')"><div class="act-time">5:00<br>PM</div><div><div class="act-name">Massage — 60 min</div><div class="act-detail">Deep tissue or relaxation</div><div class="act-price">$45</div></div><div class="act-status add-btn">+ Add</div></div>
+        <div class="act-item" data-cat="evening" onclick="addExtra(this,0,'Sunset session')"><div class="act-time">5:30<br>PM</div><div><div class="act-name">Sunset session</div><div class="act-detail">Sound bath · Main terrace</div><div class="act-price">Free</div></div><div class="act-status add-btn">+ Add</div></div>
+      </div>
+    </div>
+
+    <!-- Tuesday -->
+    <div class="cal-day">
+      <div class="cal-day-hdr" onclick="toggleDay(this)"><div><div class="cal-day-name">Tuesday</div><div class="cal-day-date">March 31</div></div><div class="cal-day-count">10 activities</div></div>
+      <div class="cal-acts">
+        <div class="act-item" data-cat="surf" onclick="addExtra(this,65,'Surf — Beginners')"><div class="act-time">6:00<br>AM</div><div><div class="act-name">Surf — Beginners</div><div class="act-detail">With Carlos · 5 spots</div><div class="act-price">$65</div></div><div class="act-status add-btn">+ Add</div></div>
+        <div class="act-item" data-cat="surf" onclick="addExtra(this,75,'Surf — Advanced')"><div class="act-time">6:00<br>AM</div><div><div class="act-name">Surf — Advanced</div><div class="act-detail">With Marcelo · El Tunco · 3 spots</div><div class="act-price">$75</div></div><div class="act-status add-btn">+ Add</div></div>
+        <div class="act-item" data-cat="wellness" onclick="addExtra(this,20,'Yoga — Surf flow')"><div class="act-time">8:00<br>AM</div><div><div class="act-name">Yoga — Surf flow</div><div class="act-detail">Garden · 8 spots</div><div class="act-price">$20</div></div><div class="act-status add-btn">+ Add</div></div>
+        <div class="act-item" data-cat="training" onclick="addExtra(this,35,'Jiu Jitsu intro')"><div class="act-time">10:00<br>AM</div><div><div class="act-name">Jiu Jitsu intro</div><div class="act-detail">No experience needed · 6 spots</div><div class="act-price">$35</div></div><div class="act-status add-btn">+ Add</div></div>
+        <div class="act-item" data-cat="training" onclick="addExtra(this,30,'UNatural Method')"><div class="act-time">11:00<br>AM</div><div><div class="act-name">UNatural Method</div><div class="act-detail">Breath · Cold · Movement · 4 spots</div><div class="act-price">$30</div></div><div class="act-status add-btn">+ Add</div></div>
+        <div class="act-item" data-cat="culture" onclick="addExtra(this,30,'T-shirt tie-dye')"><div class="act-time">3:00<br>PM</div><div><div class="act-name">T-shirt tie-dye workshop</div><div class="act-detail">Create your own Puro Surf tee</div><div class="act-price">$30</div></div><div class="act-status add-btn">+ Add</div></div>
+        <div class="act-item" data-cat="wellness" onclick="addExtra(this,30,'Ice Bath guided')"><div class="act-time">4:00<br>PM</div><div><div class="act-name">Ice Bath guided</div><div class="act-detail">Guided contrast therapy · 4 spots</div><div class="act-price">$30</div></div><div class="act-status add-btn">+ Add</div></div>
+        <div class="act-item" data-cat="wellness" onclick="addExtra(this,45,'Massage — 60 min')"><div class="act-time">5:00<br>PM</div><div><div class="act-name">Massage — 60 min</div><div class="act-detail">Sports recovery</div><div class="act-price">$45</div></div><div class="act-status add-btn">+ Add</div></div>
+        <div class="act-item" data-cat="training" onclick="addExtra(this,25,'Self-defence class')"><div class="act-time">6:00<br>PM</div><div><div class="act-name">Self-defence class</div><div class="act-detail">Fundamentals · 6 spots</div><div class="act-price">$25</div></div><div class="act-status add-btn">+ Add</div></div>
+        <div class="act-item" data-cat="evening" onclick="addExtra(this,35,'Wine night')"><div class="act-time">7:00<br>PM</div><div><div class="act-name">Wine night</div><div class="act-detail">Curated tasting · Terrace</div><div class="act-price">$35</div></div><div class="act-status add-btn">+ Add</div></div>
+      </div>
+    </div>
+
+    <!-- Wednesday -->
+    <div class="cal-day">
+      <div class="cal-day-hdr" onclick="toggleDay(this)"><div><div class="cal-day-name">Wednesday</div><div class="cal-day-date">April 1</div></div><div class="cal-day-count">9 activities</div></div>
+      <div class="cal-acts">
+        <div class="act-item" data-cat="surf" onclick="addExtra(this,65,'Surf — Intermediate')"><div class="act-time">6:00<br>AM</div><div><div class="act-name">Surf — Intermediate</div><div class="act-detail">With Marcelo · El Zonte · 4 spots</div><div class="act-price">$65</div></div><div class="act-status add-btn">+ Add</div></div>
+        <div class="act-item" data-cat="wellness" onclick="addExtra(this,20,'Yoga &amp; mobility')"><div class="act-time">8:00<br>AM</div><div><div class="act-name">Yoga &amp; mobility</div><div class="act-detail">With Sara · Terrace · 8 spots</div><div class="act-price">$20</div></div><div class="act-status add-btn">+ Add</div></div>
+        <div class="act-item" data-cat="training" onclick="addExtra(this,30,'Surf Skate session')"><div class="act-time">10:00<br>AM</div><div><div class="act-name">Surf Skate session</div><div class="act-detail">With Marcelo · 6 spots</div><div class="act-price">$30</div></div><div class="act-status add-btn">+ Add</div></div>
+        <div class="act-item" data-cat="wellness" onclick="addExtra(this,20,'Meditation session')"><div class="act-time">12:00<br>PM</div><div><div class="act-name">Guided meditation</div><div class="act-detail">Breathwork · Rooftop</div><div class="act-price">$20</div></div><div class="act-status add-btn">+ Add</div></div>
+        <div class="act-item" data-cat="culture" onclick="addExtra(this,25,'Painting afternoon')"><div class="act-time">3:00<br>PM</div><div><div class="act-name">Painting afternoon</div><div class="act-detail">Art session · Ocean-inspired</div><div class="act-price">$25</div></div><div class="act-status add-btn">+ Add</div></div>
+        <div class="act-item" data-cat="wellness" onclick="addExtra(this,30,'Ice Bath guided')"><div class="act-time">4:00<br>PM</div><div><div class="act-name">Ice Bath guided</div><div class="act-detail">Contrast therapy · 4 spots</div><div class="act-price">$30</div></div><div class="act-status add-btn">+ Add</div></div>
+        <div class="act-item" data-cat="wellness" onclick="addExtra(this,45,'Massage — 60 min')"><div class="act-time">5:00<br>PM</div><div><div class="act-name">Massage — 60 min</div><div class="act-detail">Deep tissue recovery</div><div class="act-price">$45</div></div><div class="act-status add-btn">+ Add</div></div>
+        <div class="act-item" data-cat="training" onclick="addExtra(this,35,'Jiu Jitsu — Level 2')"><div class="act-time">6:00<br>PM</div><div><div class="act-name">Jiu Jitsu — Level 2</div><div class="act-detail">Continuing · 6 spots</div><div class="act-price">$35</div></div><div class="act-status add-btn">+ Add</div></div>
+        <div class="act-item" data-cat="evening" onclick="addExtra(this,0,'Community dinner')"><div class="act-time">7:00<br>PM</div><div><div class="act-name">Community dinner</div><div class="act-detail">Shared table · Meet other guests</div><div class="act-price">Free</div></div><div class="act-status add-btn">+ Add</div></div>
+      </div>
+    </div>
+
+    <!-- Thursday -->
+    <div class="cal-day">
+      <div class="cal-day-hdr" onclick="toggleDay(this)"><div><div class="cal-day-name">Thursday</div><div class="cal-day-date">April 2</div></div><div class="cal-day-count">9 activities</div></div>
+      <div class="cal-acts">
+        <div class="act-item" data-cat="surf" onclick="addExtra(this,65,'Surf — Beginners')"><div class="act-time">6:00<br>AM</div><div><div class="act-name">Surf — Beginners</div><div class="act-detail">With Carlos · 5 spots</div><div class="act-price">$65</div></div><div class="act-status add-btn">+ Add</div></div>
+        <div class="act-item" data-cat="surf" onclick="addExtra(this,75,'Surf — Advanced')"><div class="act-time">6:00<br>AM</div><div><div class="act-name">Surf — Advanced</div><div class="act-detail">With Marcelo · El Tunco</div><div class="act-price">$75</div></div><div class="act-status add-btn">+ Add</div></div>
+        <div class="act-item" data-cat="wellness" onclick="addExtra(this,20,'Yoga — Yin restore')"><div class="act-time">8:00<br>AM</div><div><div class="act-name">Yoga — Yin restore</div><div class="act-detail">Deep stretch · 8 spots</div><div class="act-price">$20</div></div><div class="act-status add-btn">+ Add</div></div>
+        <div class="act-item" data-cat="training" onclick="addExtra(this,25,'Pool training')"><div class="act-time">10:00<br>AM</div><div><div class="act-name">Pool training</div><div class="act-detail">Surf simulation · 4 spots</div><div class="act-price">$25</div></div><div class="act-status add-btn">+ Add</div></div>
+        <div class="act-item" data-cat="culture" onclick="addExtra(this,25,'Coffee tasting')"><div class="act-time">3:00<br>PM</div><div><div class="act-name">Coffee tasting</div><div class="act-detail">Single-origin · Barista guided</div><div class="act-price">$25</div></div><div class="act-status add-btn">+ Add</div></div>
+        <div class="act-item" data-cat="wellness" onclick="addExtra(this,30,'Ice Bath guided')"><div class="act-time">4:00<br>PM</div><div><div class="act-name">Ice Bath guided</div><div class="act-detail">Contrast therapy · 4 spots</div><div class="act-price">$30</div></div><div class="act-status add-btn">+ Add</div></div>
+        <div class="act-item" data-cat="wellness" onclick="addExtra(this,45,'Massage — 60 min')"><div class="act-time">5:00<br>PM</div><div><div class="act-name">Massage — 60 min</div><div class="act-detail">Relaxation</div><div class="act-price">$45</div></div><div class="act-status add-btn">+ Add</div></div>
+        <div class="act-item" data-cat="training" onclick="addExtra(this,25,'Self-defence class')"><div class="act-time">6:00<br>PM</div><div><div class="act-name">Self-defence class</div><div class="act-detail">Fundamentals · 6 spots</div><div class="act-price">$25</div></div><div class="act-status add-btn">+ Add</div></div>
+        <div class="act-item" data-cat="evening" onclick="addExtra(this,0,'Sunset sound bath')"><div class="act-time">5:30<br>PM</div><div><div class="act-name">Sunset sound bath</div><div class="act-detail">Main terrace · Open</div><div class="act-price">Free</div></div><div class="act-status add-btn">+ Add</div></div>
+      </div>
+    </div>
+
+    <!-- Friday -->
+    <div class="cal-day">
+      <div class="cal-day-hdr" onclick="toggleDay(this)"><div><div class="cal-day-name">Friday</div><div class="cal-day-date">April 3</div></div><div class="cal-day-count">9 activities</div></div>
+      <div class="cal-acts">
+        <div class="act-item" data-cat="surf" onclick="addExtra(this,65,'Surf — Intermediate')"><div class="act-time">6:00<br>AM</div><div><div class="act-name">Surf — Intermediate</div><div class="act-detail">With Marcelo · 4 spots</div><div class="act-price">$65</div></div><div class="act-status add-btn">+ Add</div></div>
+        <div class="act-item" data-cat="wellness" onclick="addExtra(this,20,'Yoga &amp; mobility')"><div class="act-time">8:00<br>AM</div><div><div class="act-name">Yoga &amp; mobility</div><div class="act-detail">With Sara · Terrace</div><div class="act-price">$20</div></div><div class="act-status add-btn">+ Add</div></div>
+        <div class="act-item" data-cat="training" onclick="addExtra(this,30,'Surf Skate session')"><div class="act-time">10:00<br>AM</div><div><div class="act-name">Surf Skate session</div><div class="act-detail">6 spots</div><div class="act-price">$30</div></div><div class="act-status add-btn">+ Add</div></div>
+        <div class="act-item" data-cat="training" onclick="addExtra(this,30,'UNatural Method')"><div class="act-time">11:00<br>AM</div><div><div class="act-name">UNatural Method</div><div class="act-detail">Breath · Cold · Movement</div><div class="act-price">$30</div></div><div class="act-status add-btn">+ Add</div></div>
+        <div class="act-item" data-cat="culture" onclick="addExtra(this,30,'T-shirt tie-dye')"><div class="act-time">3:00<br>PM</div><div><div class="act-name">T-shirt tie-dye workshop</div><div class="act-detail">Create your own tee</div><div class="act-price">$30</div></div><div class="act-status add-btn">+ Add</div></div>
+        <div class="act-item" data-cat="wellness" onclick="addExtra(this,30,'Ice Bath guided')"><div class="act-time">4:00<br>PM</div><div><div class="act-name">Ice Bath guided</div><div class="act-detail">Contrast therapy</div><div class="act-price">$30</div></div><div class="act-status add-btn">+ Add</div></div>
+        <div class="act-item" data-cat="wellness" onclick="addExtra(this,45,'Massage — 60 min')"><div class="act-time">5:00<br>PM</div><div><div class="act-name">Massage — 60 min</div><div class="act-detail">Your choice of style</div><div class="act-price">$45</div></div><div class="act-status add-btn">+ Add</div></div>
+        <div class="act-item" data-cat="training" onclick="addExtra(this,35,'Jiu Jitsu intro')"><div class="act-time">6:00<br>PM</div><div><div class="act-name">Jiu Jitsu intro</div><div class="act-detail">No experience needed</div><div class="act-price">$35</div></div><div class="act-status add-btn">+ Add</div></div>
+        <div class="act-item" data-cat="evening" onclick="addExtra(this,35,'Wine night')"><div class="act-time">7:00<br>PM</div><div><div class="act-name">Wine night</div><div class="act-detail">Curated tasting · Terrace</div><div class="act-price">$35</div></div><div class="act-status add-btn">+ Add</div></div>
+      </div>
+    </div>
+
+    <!-- Saturday -->
+    <div class="cal-day">
+      <div class="cal-day-hdr" onclick="toggleDay(this)"><div><div class="cal-day-name">Saturday</div><div class="cal-day-date">April 4</div></div><div class="cal-day-count">8 activities</div></div>
+      <div class="cal-acts">
+        <div class="act-item" data-cat="surf" onclick="addExtra(this,65,'Surf — Beginners')"><div class="act-time">6:00<br>AM</div><div><div class="act-name">Surf — Beginners</div><div class="act-detail">With Carlos · 5 spots</div><div class="act-price">$65</div></div><div class="act-status add-btn">+ Add</div></div>
+        <div class="act-item" data-cat="wellness" onclick="addExtra(this,20,'Yoga — Surf flow')"><div class="act-time">8:00<br>AM</div><div><div class="act-name">Yoga — Surf flow</div><div class="act-detail">Garden · 8 spots</div><div class="act-price">$20</div></div><div class="act-status add-btn">+ Add</div></div>
+        <div class="act-item" data-cat="wellness" onclick="addExtra(this,20,'Meditation session')"><div class="act-time">10:00<br>AM</div><div><div class="act-name">Guided meditation</div><div class="act-detail">Breathwork · Rooftop</div><div class="act-price">$20</div></div><div class="act-status add-btn">+ Add</div></div>
+        <div class="act-item" data-cat="culture" onclick="addExtra(this,25,'Painting afternoon')"><div class="act-time">3:00<br>PM</div><div><div class="act-name">Painting afternoon</div><div class="act-detail">Art session · Ocean-inspired</div><div class="act-price">$25</div></div><div class="act-status add-btn">+ Add</div></div>
+        <div class="act-item" data-cat="wellness" onclick="addExtra(this,30,'Ice Bath guided')"><div class="act-time">4:00<br>PM</div><div><div class="act-name">Ice Bath guided</div><div class="act-detail">Contrast therapy</div><div class="act-price">$30</div></div><div class="act-status add-btn">+ Add</div></div>
+        <div class="act-item" data-cat="wellness" onclick="addExtra(this,45,'Massage — 60 min')"><div class="act-time">5:00<br>PM</div><div><div class="act-name">Massage — 60 min</div><div class="act-detail">Weekend relaxation</div><div class="act-price">$45</div></div><div class="act-status add-btn">+ Add</div></div>
+        <div class="act-item" data-cat="evening" onclick="addExtra(this,0,'Sunset session')"><div class="act-time">5:30<br>PM</div><div><div class="act-name">Sunset session</div><div class="act-detail">Sound bath · Main terrace</div><div class="act-price">Free</div></div><div class="act-status add-btn">+ Add</div></div>
+        <div class="act-item" data-cat="evening" onclick="addExtra(this,0,'Community dinner')"><div class="act-time">7:00<br>PM</div><div><div class="act-name">Community dinner</div><div class="act-detail">Shared table · Meet other guests</div><div class="act-price">Free</div></div><div class="act-status add-btn">+ Add</div></div>
+      </div>
+    </div>
+
+    <!-- Sunday -->
+    <div class="cal-day">
+      <div class="cal-day-hdr" onclick="toggleDay(this)"><div><div class="cal-day-name">Sunday</div><div class="cal-day-date">April 5</div></div><div class="cal-day-count">6 activities</div></div>
+      <div class="cal-acts">
+        <div class="act-item" data-cat="surf" onclick="addExtra(this,75,'Surf — Advanced')"><div class="act-time">6:00<br>AM</div><div><div class="act-name">Surf — Advanced</div><div class="act-detail">With Marcelo · El Tunco</div><div class="act-price">$75</div></div><div class="act-status add-btn">+ Add</div></div>
+        <div class="act-item" data-cat="wellness" onclick="addExtra(this,20,'Yoga — Yin restore')"><div class="act-time">8:00<br>AM</div><div><div class="act-name">Yoga — Yin restore</div><div class="act-detail">Deep stretch · Recovery</div><div class="act-price">$20</div></div><div class="act-status add-btn">+ Add</div></div>
+        <div class="act-item" data-cat="wellness" onclick="addExtra(this,20,'Meditation session')"><div class="act-time">10:00<br>AM</div><div><div class="act-name">Guided meditation</div><div class="act-detail">Sunday reset · Rooftop</div><div class="act-price">$20</div></div><div class="act-status add-btn">+ Add</div></div>
+        <div class="act-item" data-cat="culture" onclick="addExtra(this,25,'Coffee tasting')"><div class="act-time">3:00<br>PM</div><div><div class="act-name">Coffee tasting</div><div class="act-detail">Single-origin experience</div><div class="act-price">$25</div></div><div class="act-status add-btn">+ Add</div></div>
+        <div class="act-item" data-cat="wellness" onclick="addExtra(this,45,'Massage — 60 min')"><div class="act-time">5:00<br>PM</div><div><div class="act-name">Massage — 60 min</div><div class="act-detail">Sunday wind-down</div><div class="act-price">$45</div></div><div class="act-status add-btn">+ Add</div></div>
+        <div class="act-item" data-cat="evening" onclick="addExtra(this,0,'Sunset sound bath')"><div class="act-time">5:30<br>PM</div><div><div class="act-name">Sunset sound bath</div><div class="act-detail">Main terrace · Open</div><div class="act-price">Free</div></div><div class="act-status add-btn">+ Add</div></div>
+      </div>
+    </div>
+
+  </div>
+
   <div class="divider"></div>
   <div class="section-title teal">Give back while you're here</div>
   <div class="pill" onclick="switchScreen('giveback')">
@@ -1421,6 +1681,71 @@ function selectMode(e,btn,type){
 }
 function toggleTool(el){el.classList.toggle('open');}
 function toggleDay(el){el.parentElement.classList.toggle('open');}
+
+/* ══ Calendar: Mode switching ══ */
+let calMode='camp';
+let folioTotal=0;
+let folioCount=0;
+
+function switchCalMode(mode){
+  calMode=mode;
+  document.getElementById('cal-camp').style.display=mode==='camp'?'block':'none';
+  document.getElementById('cal-hotel').style.display=mode==='hotel'?'block':'none';
+  document.querySelectorAll('.mode-btn').forEach(b=>b.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+  // Reset folio on mode switch
+  folioTotal=0;folioCount=0;updateFolio();
+  // Reset all added items
+  document.querySelectorAll('.act-item.added').forEach(el=>{
+    el.classList.remove('added');
+    const btn=el.querySelector('.act-status');
+    if(btn){btn.className='act-status add-btn';btn.textContent='+ Add';}
+    el.onclick=el._origClick||null;
+  });
+  // Update folio label
+  document.querySelector('.folio-sub').textContent=mode==='camp'?'Extras beyond package':'Added to room folio';
+}
+
+function addExtra(el,price,name){
+  if(el.classList.contains('added'))return;
+  el._origClick=el.onclick;
+  el.classList.add('added');
+  const btn=el.querySelector('.act-status');
+  btn.className='act-status added-tag';
+  btn.textContent='✓ Added';
+  el.onclick=function(){removeExtra(el,price,name);};
+  folioTotal+=price;
+  folioCount++;
+  updateFolio();
+  showToast(name+' added — $'+price);
+}
+
+function removeExtra(el,price,name){
+  el.classList.remove('added');
+  const btn=el.querySelector('.act-status');
+  btn.className='act-status add-btn';
+  btn.textContent='+ Add';
+  el.onclick=function(){addExtra(el,price,name);};
+  folioTotal-=price;
+  folioCount--;
+  updateFolio();
+  showToast(name+' removed');
+}
+
+function updateFolio(){
+  document.getElementById('folio-total').textContent='$'+folioTotal;
+  document.getElementById('folio-count').textContent=folioCount;
+}
+
+function filterCat(cat,chip){
+  document.querySelectorAll('.cat-chip').forEach(c=>c.classList.remove('active'));
+  chip.classList.add('active');
+  const container=calMode==='camp'?document.getElementById('cal-camp'):document.getElementById('cal-hotel');
+  container.querySelectorAll('.act-item').forEach(item=>{
+    const itemCat=item.getAttribute('data-cat');
+    item.style.display=(cat==='all'||itemCat===cat||itemCat==='all')?'flex':'none';
+  });
+}
 
 function selectIncentive(el, amount){
   document.querySelectorAll('.incentive-opt').forEach(o=>o.classList.remove('selected'));
