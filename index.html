@@ -247,7 +247,29 @@ body{background:var(--dark);color:var(--cream);font-family:'DM Sans',sans-serif;
 .avail-header{font-family:'Cormorant Garamond',serif;font-size:14px;color:var(--cream);font-weight:300;margin-bottom:4px;}
 .avail-sub{font-size:10px;color:var(--muted);margin-bottom:12px;}
 
-/* Mode switcher - not used anymore but keep for compat */
+/* Week day tabs */
+.wk-tab{padding:7px 12px;border-radius:8px;font-size:10px;font-weight:500;letter-spacing:0.04em;cursor:pointer;transition:all 0.2s;background:rgba(255,255,255,0.03);color:var(--muted);border:1px solid rgba(255,255,255,0.04);text-align:center;min-width:40px;}
+.wk-tab.active{background:rgba(233,65,124,0.12);color:var(--pink);border-color:rgba(233,65,124,0.25);}
+.wk-tab.has-items{position:relative;}
+.wk-tab.has-items::after{content:'';position:absolute;top:3px;right:3px;width:5px;height:5px;border-radius:50%;background:var(--pink);}
+
+/* My Calendar day view */
+.mycal-day-view{min-height:60px;margin-bottom:12px;}
+.mycal-item{display:flex;align-items:center;gap:10px;padding:9px 12px;background:var(--card);border-radius:9px;margin-bottom:5px;border-left:2px solid var(--pink);}
+.mycal-item.extra{border-left-color:var(--gold);}
+.mycal-item .mi-time{font-size:9px;color:var(--pink);font-weight:500;min-width:40px;}
+.mycal-item.extra .mi-time{color:var(--gold);}
+.mycal-item .mi-name{font-size:11px;color:var(--cream);}
+.mycal-item .mi-detail{font-size:9px;color:var(--muted);}
+
+/* Folio mini bar */
+.folio-mini{background:var(--card);border-radius:10px;padding:10px 14px;margin-bottom:12px;border:1px solid rgba(200,169,110,0.12);}
+
+/* Browse activities button */
+.browse-activities-btn{background:linear-gradient(135deg,rgba(233,65,124,0.08),rgba(15,34,54,0.6));border-radius:12px;padding:16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:all 0.2s;border:1px solid rgba(233,65,124,0.15);margin-bottom:4px;}
+.browse-activities-btn:hover{background:linear-gradient(135deg,rgba(233,65,124,0.14),rgba(15,34,54,0.6));}
+
+/* Hide old mode switcher */
 .mode-switcher{display:none;}
 .mode-btn{display:none;}
 
@@ -677,17 +699,48 @@ body{background:var(--dark);color:var(--cream);font-family:'DM Sans',sans-serif;
   </div>
 
   <div class="divider"></div>
-  <div class="section-title">Today at Puro Surf</div>
-  <div class="card" onclick="switchScreen('calendar')">
-    <div class="card-accent teal"></div>
-    <div class="card-header"><div class="card-title">Surf class — Level 2</div><div class="card-tag teal">6:30 AM</div></div>
-    <div class="card-body">With Marcelo · Playa El Zonte · 3 spots available</div>
+
+  <!-- ══ MY CALENDAR ══ -->
+  <div class="section-title">My Calendar</div>
+  <div style="font-size:10px;color:var(--muted);margin:-6px 0 12px;line-height:1.5;" id="mycal-sub">Your personal schedule for the week. Add activities from the catalog below.</div>
+
+  <!-- Week day tabs -->
+  <div style="display:flex;gap:4px;margin-bottom:10px;overflow-x:auto;-webkit-overflow-scrolling:touch;" class="week-tabs" id="week-tabs">
+    <div class="wk-tab active" onclick="selectWeekDay(this,'Sun')">Sun</div>
+    <div class="wk-tab" onclick="selectWeekDay(this,'Mon')">Mon</div>
+    <div class="wk-tab" onclick="selectWeekDay(this,'Tue')">Tue</div>
+    <div class="wk-tab" onclick="selectWeekDay(this,'Wed')">Wed</div>
+    <div class="wk-tab" onclick="selectWeekDay(this,'Thu')">Thu</div>
+    <div class="wk-tab" onclick="selectWeekDay(this,'Fri')">Fri</div>
+    <div class="wk-tab" onclick="selectWeekDay(this,'Sat')">Sat</div>
   </div>
-  <div class="card" onclick="switchScreen('calendar')">
-    <div class="card-accent gold"></div>
-    <div class="card-header"><div class="card-title">Sunset sound bath</div><div class="card-tag gold">5:30 PM</div></div>
-    <div class="card-body">Main terrace · 2 of 8 spots remaining</div>
+
+  <!-- Day schedule -->
+  <div class="mycal-day-view" id="mycal-day-view">
+    <div class="ritual-empty" id="mycal-empty">No activities yet. Browse the catalog to plan your day.</div>
   </div>
+
+  <!-- Folio mini -->
+  <div class="folio-mini" id="folio-mini">
+    <div style="font-size:9px;color:var(--gold);letter-spacing:0.08em;text-transform:uppercase;">Room folio</div>
+    <div style="display:flex;align-items:baseline;gap:8px;">
+      <span style="font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--cream);" id="home-folio-total">$0</span>
+      <span style="font-size:9px;color:var(--muted);" id="home-folio-count">0 activities added</span>
+    </div>
+  </div>
+
+  <!-- Browse activities CTA -->
+  <div class="browse-activities-btn" onclick="switchScreen('calendar')">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <div style="font-size:24px;">📋</div>
+      <div>
+        <div style="font-size:13px;color:var(--cream);font-weight:500;">Puro Surf Activities Calendar</div>
+        <div style="font-size:10px;color:var(--muted);margin-top:2px;">Browse all classes, experiences &amp; events. Add to your week.</div>
+      </div>
+    </div>
+    <div style="font-size:16px;color:var(--pink);">→</div>
+  </div>
+
   <div class="divider"></div>
   <div class="grat-reminder-strip" onclick="switchScreen('gratitude')">
     <div class="grs-icon">🙏</div>
@@ -1122,33 +1175,8 @@ body{background:var(--dark);color:var(--cream);font-family:'DM Sans',sans-serif;
 
 <!-- ═══════════ CALENDAR ═══════════ -->
 <div class="screen" id="screen-calendar">
-  <div style="font-family:'Cormorant Garamond',serif;font-size:24px;color:var(--cream);margin-bottom:5px;font-weight:300;">Your week at<br><em style="color:var(--pink)">Puro Surf.</em></div>
-  <div style="font-size:11px;color:var(--muted);line-height:1.65;margin-bottom:14px;">Switch profiles to see how each guest type experiences Puro Surf.</div>
-
-  <!-- Profile Switcher -->
-  <div class="profile-switcher">
-    <div class="profile-btn active" onclick="switchProfile('ana')">
-      <div class="pf-avatar">👩🏽</div>
-      <div class="pf-name">Ana</div>
-      <div class="pf-type">Hotel Guest</div>
-    </div>
-    <div class="profile-btn" onclick="switchProfile('yax')">
-      <div class="pf-avatar">🧑🏽</div>
-      <div class="pf-name">Yax</div>
-      <div class="pf-type">Surf Camp</div>
-    </div>
-  </div>
-
-  <!-- ═══ MY RITUAL — Personal Calendar ═══ -->
-  <div class="ritual-section">
-    <div class="ritual-header">
-      <div class="ritual-title" id="ritual-title">🗓 Ana's Ritual Calendar</div>
-      <div class="ritual-tag" id="ritual-tag">Hotel Guest</div>
-    </div>
-    <div id="ritual-list">
-      <div class="ritual-empty">Tap "+ Add" on any activity below to build your ritual.</div>
-    </div>
-  </div>
+  <div style="font-family:'Cormorant Garamond',serif;font-size:24px;color:var(--cream);margin-bottom:5px;font-weight:300;">Puro Surf<br><em style="color:var(--pink)">Activities Calendar</em></div>
+  <div style="font-size:11px;color:var(--muted);line-height:1.65;margin-bottom:14px;">Browse all classes, experiences &amp; events. Tap "+ Add" to add them to your personal calendar.</div>
 
   <!-- Folio Summary -->
   <div class="folio-bar" id="folio-bar">
@@ -1828,6 +1856,10 @@ function switchProfile(profile){
   document.getElementById('home-greeting').textContent=profile==='ana'?'🌊 Good morning, Ana':'🌊 Good morning, Yax';
   document.getElementById('home-title').innerHTML=profile==='ana'?'Your stay at<br><em>Puro Surf</em> starts now.':'Day 2 of your<br><em>Surf Camp</em> journey.';
 
+  // Update My Calendar sub text and render
+  document.getElementById('mycal-sub').textContent=profile==='ana'?'Your personal schedule for the week. Add activities from the catalog below.':'Your surf camp program + extras. Browse the catalog to add more.';
+  renderMyCalendar();
+
   renderRitual();
 }
 
@@ -1873,7 +1905,8 @@ function addExtra(el,price,name){
 
   ritualItems.push({day:dayName.substring(0,3),time:timeText,name:name,detail:detail,price:price});
   renderRitual();
-  showToast(name+' added to ritual — $'+price);
+  renderMyCalendar();
+  showToast(name+' added to your calendar — $'+price);
 }
 
 function removeExtra(el,price,name){
@@ -1887,7 +1920,8 @@ function removeExtra(el,price,name){
   updateFolio();
   ritualItems=ritualItems.filter(i=>!(i.name===name&&i.price===price));
   renderRitual();
-  showToast(name+' removed from ritual');
+  renderMyCalendar();
+  showToast(name+' removed from calendar');
 }
 
 function updateFolio(){
@@ -1905,8 +1939,50 @@ function filterCat(cat,chip){
   });
 }
 
-// Initialize with Ana (hotel) on load - render empty ritual
-document.addEventListener('DOMContentLoaded',function(){renderRitual();});
+// ══ Home: My Calendar week view ══
+let selectedDay='Sun';
+
+function selectWeekDay(tab,day){
+  selectedDay=day;
+  document.querySelectorAll('.wk-tab').forEach(t=>t.classList.remove('active'));
+  tab.classList.add('active');
+  renderMyCalendar();
+}
+
+function renderMyCalendar(){
+  const view=document.getElementById('mycal-day-view');
+  const isYax=currentProfile==='yax';
+  const campItems=isYax?yaxRitual.filter(i=>i.day===selectedDay):[];
+  const extraItems=ritualItems.filter(i=>i.day===selectedDay);
+  const all=[...campItems,...extraItems];
+
+  if(all.length===0){
+    view.innerHTML='<div class="ritual-empty">No activities on '+selectedDay+'. Browse the catalog to add some.</div>';
+  } else {
+    let html='';
+    all.forEach(item=>{
+      const isExtra=item.price!==undefined;
+      html+='<div class="mycal-item'+(isExtra?' extra':'')+'"><div class="mi-time">'+item.time+'</div><div><div class="mi-name">'+item.name+'</div><div class="mi-detail">'+item.detail+(isExtra?' · $'+item.price:'')+'</div></div></div>';
+    });
+    view.innerHTML=html;
+  }
+
+  // Update week tab dots
+  const days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  document.querySelectorAll('.wk-tab').forEach((tab,i)=>{
+    const d=days[i];
+    const hasCamp=isYax?yaxRitual.some(it=>it.day===d):false;
+    const hasExtra=ritualItems.some(it=>it.day===d);
+    tab.classList.toggle('has-items',hasCamp||hasExtra);
+  });
+
+  // Update home folio
+  document.getElementById('home-folio-total').textContent='$'+folioTotal;
+  document.getElementById('home-folio-count').textContent=folioCount+' activit'+(folioCount===1?'y':'ies')+' added';
+}
+
+// Initialize
+document.addEventListener('DOMContentLoaded',function(){renderRitual();renderMyCalendar();});
 
 function selectIncentive(el, amount){
   document.querySelectorAll('.incentive-opt').forEach(o=>o.classList.remove('selected'));
