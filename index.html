@@ -577,9 +577,23 @@ body{background:var(--dark);color:var(--cream);font-family:'DM Sans',sans-serif;
 
 <!-- ═══════════ HOME ═══════════ -->
 <div class="screen active" id="screen-home">
+  <!-- Profile Switcher on Home -->
+  <div class="profile-switcher" style="margin-bottom:14px;">
+    <div class="profile-btn active" onclick="switchProfile('ana')">
+      <div class="pf-avatar">👩🏽</div>
+      <div class="pf-name">Ana</div>
+      <div class="pf-type">Hotel Guest</div>
+    </div>
+    <div class="profile-btn" onclick="switchProfile('yax')">
+      <div class="pf-avatar">🧑🏽</div>
+      <div class="pf-name">Yax</div>
+      <div class="pf-type">Surf Camp</div>
+    </div>
+  </div>
+
   <div class="hero-section">
-    <div class="greeting">🌊 Good morning</div>
-    <div class="hero-title">Your week at<br><em>Puro Surf</em> starts now.</div>
+    <div class="greeting" id="home-greeting">🌊 Good morning, Ana</div>
+    <div class="hero-title" id="home-title">Your stay at<br><em>Puro Surf</em> starts now.</div>
     <div class="hero-sub">What gets activated here doesn't stay here — it goes home with you.</div>
     <div class="week-dots">
       <div class="day-dot done">✓</div><div class="day-dot today">2</div><div class="day-dot">3</div><div class="day-dot">4</div><div class="day-dot">5</div><div class="day-dot">6</div><div class="day-dot">7</div>
@@ -1767,8 +1781,12 @@ const yaxRitual=[
 
 function switchProfile(profile){
   currentProfile=profile;
-  document.querySelectorAll('.profile-btn').forEach(b=>b.classList.remove('active'));
-  event.currentTarget.classList.add('active');
+  // Sync ALL profile switchers (home + calendar)
+  document.querySelectorAll('.profile-switcher').forEach(sw=>{
+    sw.querySelectorAll('.profile-btn').forEach((b,i)=>{
+      b.classList.toggle('active',(profile==='ana'&&i===0)||(profile==='yax'&&i===1));
+    });
+  });
 
   // Reset folio & ritual
   folioTotal=0;folioCount=0;updateFolio();
@@ -1805,6 +1823,10 @@ function switchProfile(profile){
   // Update top bar
   document.querySelector('.top-bar-name').textContent=profile==='ana'?'Welcome, Ana':'Welcome, Yax';
   document.querySelector('.top-bar-right div:last-child').textContent=profile==='ana'?'Hotel Guest · El Zonte':'Surf Camp · Day 2 of 7';
+
+  // Update home hero
+  document.getElementById('home-greeting').textContent=profile==='ana'?'🌊 Good morning, Ana':'🌊 Good morning, Yax';
+  document.getElementById('home-title').innerHTML=profile==='ana'?'Your stay at<br><em>Puro Surf</em> starts now.':'Day 2 of your<br><em>Surf Camp</em> journey.';
 
   renderRitual();
 }
